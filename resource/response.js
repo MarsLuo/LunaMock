@@ -14,4 +14,9 @@ let response = (code, content, error) => {
     return {code, body};
 };
 
-module.exports = {response,error};
+let code = {
+    success: 200,
+    paramsError:400
+}
+
+module.exports = {response, error, code};

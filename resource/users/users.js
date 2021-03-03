@@ -1,22 +1,22 @@
-const Random = require('mockjs').Random;
-const faker = require('faker');
-var {response} = require('../response.js');
-
+var {response, code} = require('../response.js');
+var user = require('./model');
 module.exports = [
     {
-      path: '/users/me',
+      path: '/users/:id',
       method: 'get',
       operation(req, res, next) {
-        res.send(200, userInfo(req));
+        var {code, body} = handlerUserInfo(req);
+        res.send(code, body);
         next();
       }
     }
   ];
   
-  function userInfo(req) {
-    return {
-        id: faker.random.uuid(), 
-        mobile: '16499799494',
-        name:Random.cname()
-    };
+  function handlerUserInfo(req) {
+    let id = req.params.id;
+    if(id.length > 5) {
+      return response(code.success, user.user(id))
+    }else {
+      return response(code.paramsError, null, user.error.idTooShort)
+    }
   }
